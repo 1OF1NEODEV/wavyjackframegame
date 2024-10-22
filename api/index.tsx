@@ -138,7 +138,14 @@ app.frame('/', (c) => {
           <h2>Your Hand: {playerScore}</h2>
           <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '20px' }}>
             {state.playerHand.map((card: Card, index: number) => (
-              <img key={index} src={card.image} alt={`${card.value} of ${card.suit}`} style={{ width: '50px', marginRight: '5px' }} />
+              <img 
+                key={index} 
+                src={`/assets/${card.value}_of_${card.suit}.png`} 
+                alt={`${card.value} of ${card.suit}`} 
+                style={{ width: '50px', height: '70px', marginRight: '5px' }} 
+                width={50}
+                height={70}
+              />
             ))}
           </div>
         </div>
@@ -146,7 +153,14 @@ app.frame('/', (c) => {
           <h2>Dealer's Hand: {state.gameOver ? dealerScore : '?'}</h2>
           <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '20px' }}>
             {state.dealerHand.map((card: Card, index: number) => (
-              <img key={index} src={index === 0 || state.gameOver ? card.image : '/assets/card_back.png'} alt="Card" style={{ width: '50px', marginRight: '5px' }} />
+              <img 
+                key={index} 
+                src={index === 0 || state.gameOver ? `/assets/${card.value}_of_${card.suit}.png` : '/assets/card_back.png'} 
+                alt="Card" 
+                style={{ width: '50px', height: '70px', marginRight: '5px' }} 
+                width={50}
+                height={70}
+              />
             ))}
           </div>
         </div>
