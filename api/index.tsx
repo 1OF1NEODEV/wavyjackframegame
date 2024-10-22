@@ -67,6 +67,8 @@ const calculateHandValue = (hand: Card[]): number => {
   return value
 }
 
+const baseUrl = process.env.BASE_URL || ''
+
 export const app = new Frog({
   assetsPath: '/assets',
   basePath: '/api',
@@ -140,8 +142,8 @@ app.frame('/', (c) => {
             {state.playerHand.map((card: Card, index: number) => (
               <img 
                 key={index} 
-                src={`/assets/${card.value}_of_${card.suit}.png`} 
-                alt={`${card.value} of ${card.suit}`} 
+                src={`${baseUrl}/assets/${card.value}_of_${card.suit}.png`}
+                alt={`${card.value} of ${card.suit}`}
                 style={{ width: '50px', height: '70px', marginRight: '5px' }} 
                 width={50}
                 height={70}
@@ -155,7 +157,7 @@ app.frame('/', (c) => {
             {state.dealerHand.map((card: Card, index: number) => (
               <img 
                 key={index} 
-                src={index === 0 || state.gameOver ? `/assets/${card.value}_of_${card.suit}.png` : '/assets/card_back.png'} 
+                src={index === 0 || state.gameOver ? `${baseUrl}/assets/${card.value}_of_${card.suit}.png` : '/assets/card_back.png'} 
                 alt="Card" 
                 style={{ width: '50px', height: '70px', marginRight: '5px' }} 
                 width={50}
