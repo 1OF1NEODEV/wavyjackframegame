@@ -10,7 +10,10 @@ import { handle } from 'frog/vercel'
 // }
 
 // Define card types and deck
-type Card = { suit: string; value: string; image: string }
+interface Card {
+  value: string;
+  suit: string;
+}
 const suits = ['hearts', 'diamonds', 'clubs', 'spades']
 const values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']
 
