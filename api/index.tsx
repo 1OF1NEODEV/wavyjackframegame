@@ -160,7 +160,7 @@ app.frame('/', (c) => {
                 key={index} 
                 src={index === 0 || state.gameOver 
                   ? `/assets/${card.value.toLowerCase()}_of_${card.suit.toLowerCase()}.png`
-                  : 'https://wavyjackframegame.vercel.app/assets/card_back.png'
+                  : '/assets/card_back.png'
                 } 
                 alt="Card" 
                 style={{ width: '80px', height: '120px', marginRight: '5px' }} 
