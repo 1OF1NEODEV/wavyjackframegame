@@ -137,7 +137,7 @@ app.frame('/', (c) => {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        backgroundImage: 'ipfs://Qmf7UyLDQMEpsRzxsZppePXTV3yRD6z17gBScKvSCVcqys', // Set the background image here
+        backgroundImage: 'https://ipfs.io/ipfs/bafybeihlplp6qc7vveatv5y6w532isxya3dx3yf4zqibkkffbwwekmqtle', // Set the background image here
         backgroundSize: 'cover', // Cover the entire area
         backgroundPosition: 'center', // Center the image
         color: 'white',
