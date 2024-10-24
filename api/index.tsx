@@ -73,9 +73,7 @@ const calculateHandValue = (hand: Card[]): number => {
 export const app = new Frog({
   assetsPath: '/assets',
   basePath: '/api',
-  // Supply a Hub to enable frame verification.
-  // hub: neynar({ apiKey: 'NEYNAR_FROG_FM' })
-  title: 'Blackjack Frame',
+  title: 'WavyJack', // Change the title here
 })
 
 app.use('/assets/*', serveStatic({ root: './assets' }))
@@ -136,7 +134,7 @@ app.frame('/', (c) => {
   return c.res({
     image: (
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', backgroundColor: '#2c3e50', color: 'white', padding: '20px', width: '100%', height: '100%' }}>
-        <h1 style={{ marginBottom: '20px' }}>Blackjack</h1>
+        <h1 style={{ marginBottom: '20px' }}>WavyJack</h1> // Change the title here
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
           <h2>Your Hand: {playerScore}</h2>
           <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '20px' }}>
