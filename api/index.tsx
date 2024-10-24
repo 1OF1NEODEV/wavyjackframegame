@@ -73,10 +73,12 @@ const calculateHandValue = (hand: Card[]): number => {
 export const app = new Frog({
   assetsPath: '/assets',
   basePath: '/api',
-  title: 'WavyJack', // Change the title here
+  title: 'WavyJack',
 })
 
 app.use('/assets/*', serveStatic({ root: './assets' }))
+
+let showTitleScreen = true; // State to manage title screen visibility
 
 app.frame('/', (c) => {
   const { buttonValue, deriveState } = c
@@ -88,60 +90,57 @@ app.frame('/', (c) => {
       state = previousState as GameState;
     }
 
-    if (buttonValue === 'start') {
-      // Start new game
-      const newDeck = createDeck()
-      const [card1, deck1] = drawCard(newDeck)
-      const [card2, deck2] = drawCard(deck1)
-      const [dealerCard, finalDeck] = drawCard(deck2)
-      state = {
-        playerHand: [card1, card2],
-        dealerHand: [dealerCard],
-        deck: finalDeck,
-        gameOver: false
+    if (showTitleScreen) {
+      if (buttonValue === 'start') {
+        showTitleScreen = false; // Hide title screen and start the game
+        const newDeck = createDeck()
+        const [card1, deck1] = drawCard(newDeck)
+        const [card2, deck2] = drawCard(deck1)
+        const [dealerCard, finalDeck] = drawCard(deck2)
+        state = {
+          playerHand: [card1, card2],
+          dealerHand: [dealerCard],
+          deck: finalDeck,
+          gameOver: false
+        }
+      } else if (buttonValue === 'settings') {
+        // Handle settings button functionality
+        console.log("Settings button clicked");
+      } else if (buttonValue === 'exit') {
+        // Handle exit button functionality
+        console.log("Exit button clicked");
       }
-    } else if (buttonValue === 'hit') {
-      // Player hits
-      const [newCard, newDeck] = drawCard(state.deck)
-      const newPlayerHand = [...state.playerHand, newCard]
-      state = {
-        ...state,
-        playerHand: newPlayerHand,
-        deck: newDeck,
-        gameOver: calculateHandValue(newPlayerHand) > 21
-      }
-    } else if (buttonValue === 'stand') {
-      // Player stands, dealer plays
-      let dealerHand = [...state.dealerHand]
-      let deck = [...state.deck]
-      while (calculateHandValue(dealerHand) < 17) {
-        const [newCard, newDeck] = drawCard(deck)
-        dealerHand.push(newCard)
-        deck = newDeck
-      }
-      state = {
-        ...state,
-        dealerHand,
-        deck,
-        gameOver: true
+    } else {
+      if (buttonValue === 'hit') {
+        const [newCard, newDeck] = drawCard(state.deck)
+        const newPlayerHand = [...state.playerHand, newCard]
+        state = {
+          ...state,
+          playerHand: newPlayerHand,
+          deck: newDeck,
+          gameOver: calculateHandValue(newPlayerHand) > 21
+        }
+      } else if (buttonValue === 'stand') {
+        let dealerHand = [...state.dealerHand]
+        let deck = [...state.deck]
+        while (calculateHandValue(dealerHand) < 17) {
+          const [newCard, newDeck] = drawCard(deck)
+          dealerHand.push(newCard)
+          deck = newDeck
+        }
+        state = {
+          ...state,
+          dealerHand,
+          deck,
+          gameOver: true
+        }
       }
     }
   })
 
-  const playerScore = calculateHandValue(state.playerHand)
-  const dealerScore = calculateHandValue(state.dealerHand)
-
-  return c.res({
-    image: (
-      <div>
-        <style>
-          {`
-            @font-face {
-              font-family: 'M5X7';
-              src: url('/assets/fonts/m5x7.ttf') format('truetype');
-            }
-          `}
-        </style>
+  if (showTitleScreen) {
+    return c.res({
+      image: (
         <div style={{
           display: 'flex',
           flexDirection: 'column',
@@ -151,52 +150,75 @@ app.frame('/', (c) => {
           padding: '20px',
           width: '100%',
           height: '100%',
-          fontFamily: 'M5X7, monospace' // Use the custom font here
         }}>
           <h1 style={{ marginBottom: '20px' }}>WavyJack</h1>
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
-            <h2>Your Hand: {playerScore}</h2>
-            <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '20px' }}>
-              {state.playerHand.map((card: Card, index: number) => (
-                <img 
-                  key={index} 
-                  src={`/assets/${card.value.toLowerCase()}_of_${card.suit.toLowerCase()}.png`} 
-                  alt={`${card.value} of ${card.suit}`} 
-                  style={{ width: '80px', height: '120px', marginRight: '5px' }} 
-                  width={80}
-                  height={120}
-                />
-              ))}
-            </div>
-          </div>
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
-            <h2>Dealer's Hand: {state.gameOver ? dealerScore : '?'}</h2>
-            <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '20px' }}>
-              {state.dealerHand.map((card: Card, index: number) => (
-                <img 
-                  key={index} 
-                  src={index === 0 || state.gameOver 
-                    ? `/assets/${card.value.toLowerCase()}_of_${card.suit.toLowerCase()}.png`
-                    : '/assets/card_back.png'
-                  } 
-                  alt="Card" 
-                  style={{ width: '80px', height: '120px', marginRight: '5px' }} 
-                  width={80}
-                  height={120}
-                />
-              ))}
-            </div>
-          </div>
-          {state.gameOver && (
-            <h2 style={{ textAlign: 'center' }}>
-              {playerScore > 21 ? 'Bust! You lose!' :
-               dealerScore > 21 ? 'Dealer busts! You win!' :
-               playerScore > dealerScore ? 'You win!' :
-               playerScore < dealerScore ? 'You lose!' :
-               'It\'s a tie!'}
-            </h2>
-          )}
+          <Button value="start">Start Game</Button>
+          <Button value="settings">Settings</Button>
+          <Button value="exit">Exit</Button>
         </div>
+      ),
+      intents: []
+    })
+  }
+
+  const playerScore = calculateHandValue(state.playerHand)
+  const dealerScore = calculateHandValue(state.dealerHand)
+
+  return c.res({
+    image: (
+      <div style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        backgroundColor: '#000000', // Background color change
+        color: 'white',
+        padding: '20px',
+        width: '100%',
+        height: '100%',
+      }}>
+        <h1 style={{ marginBottom: '20px' }}>WavyJack</h1>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
+          <h2>Your Hand: {playerScore}</h2>
+          <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '20px' }}>
+            {state.playerHand.map((card: Card, index: number) => (
+              <img 
+                key={index} 
+                src={`/assets/${card.value.toLowerCase()}_of_${card.suit.toLowerCase()}.png`} 
+                alt={`${card.value} of ${card.suit}`} 
+                style={{ width: '80px', height: '120px', marginRight: '5px' }} 
+                width={80}
+                height={120}
+              />
+            ))}
+          </div>
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
+          <h2>Dealer's Hand: {state.gameOver ? dealerScore : '?'}</h2>
+          <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '20px' }}>
+            {state.dealerHand.map((card: Card, index: number) => (
+              <img 
+                key={index} 
+                src={index === 0 || state.gameOver 
+                  ? `/assets/${card.value.toLowerCase()}_of_${card.suit.toLowerCase()}.png`
+                  : '/assets/card_back.png'
+                } 
+                alt="Card" 
+                style={{ width: '80px', height: '120px', marginRight: '5px' }} 
+                width={80}
+                height={120}
+              />
+            ))}
+          </div>
+        </div>
+        {state.gameOver && (
+          <h2 style={{ textAlign: 'center' }}>
+            {playerScore > 21 ? 'Bust! You lose!' :
+             dealerScore > 21 ? 'Dealer busts! You win!' :
+             playerScore > dealerScore ? 'You win!' :
+             playerScore < dealerScore ? 'You lose!' :
+             'It\'s a tie!'}
+          </h2>
+        )}
       </div>
     ),
     intents: [
