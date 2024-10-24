@@ -133,61 +133,70 @@ app.frame('/', (c) => {
 
   return c.res({
     image: (
-      <div style={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        backgroundImage: 'https://ipfs.io/ipfs/bafybeihlplp6qc7vveatv5y6w532isxya3dx3yf4zqibkkffbwwekmqtle', // Set the background image here
-        backgroundSize: 'cover', // Cover the entire area
-        backgroundPosition: 'center', // Center the image
-        color: 'white',
-        padding: '20px',
-        width: '100%',
-        height: '100%'
-      }}>
-        <h1 style={{ marginBottom: '20px' }}>WavyJack</h1>
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
-          <h2>Your Hand: {playerScore}</h2>
-          <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '20px' }}>
-            {state.playerHand.map((card: Card, index: number) => (
-              <img 
-                key={index} 
-                src={`/assets/${card.value.toLowerCase()}_of_${card.suit.toLowerCase()}.png`} 
-                alt={`${card.value} of ${card.suit}`} 
-                style={{ width: '80px', height: '120px', marginRight: '5px' }} 
-                width={80}
-                height={120}
-              />
-            ))}
+      <div>
+        <style>
+          {`
+            @font-face {
+              font-family: 'M5X7';
+              src: url('/assets/fonts/m5x7.ttf') format('truetype');
+            }
+          `}
+        </style>
+        <div style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          backgroundColor: '#000000',
+          color: 'white',
+          padding: '20px',
+          width: '100%',
+          height: '100%',
+          fontFamily: 'M5X7, monospace' // Use the custom font here
+        }}>
+          <h1 style={{ marginBottom: '20px' }}>WavyJack</h1>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
+            <h2>Your Hand: {playerScore}</h2>
+            <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '20px' }}>
+              {state.playerHand.map((card: Card, index: number) => (
+                <img 
+                  key={index} 
+                  src={`/assets/${card.value.toLowerCase()}_of_${card.suit.toLowerCase()}.png`} 
+                  alt={`${card.value} of ${card.suit}`} 
+                  style={{ width: '80px', height: '120px', marginRight: '5px' }} 
+                  width={80}
+                  height={120}
+                />
+              ))}
+            </div>
           </div>
-        </div>
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
-          <h2>Dealer's Hand: {state.gameOver ? dealerScore : '?'}</h2>
-          <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '20px' }}>
-            {state.dealerHand.map((card: Card, index: number) => (
-              <img 
-                key={index} 
-                src={index === 0 || state.gameOver 
-                  ? `/assets/${card.value.toLowerCase()}_of_${card.suit.toLowerCase()}.png`
-                  : '/assets/card_back.png'
-                } 
-                alt="Card" 
-                style={{ width: '80px', height: '120px', marginRight: '5px' }} 
-                width={80}
-                height={120}
-              />
-            ))}
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
+            <h2>Dealer's Hand: {state.gameOver ? dealerScore : '?'}</h2>
+            <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '20px' }}>
+              {state.dealerHand.map((card: Card, index: number) => (
+                <img 
+                  key={index} 
+                  src={index === 0 || state.gameOver 
+                    ? `/assets/${card.value.toLowerCase()}_of_${card.suit.toLowerCase()}.png`
+                    : '/assets/card_back.png'
+                  } 
+                  alt="Card" 
+                  style={{ width: '80px', height: '120px', marginRight: '5px' }} 
+                  width={80}
+                  height={120}
+                />
+              ))}
+            </div>
           </div>
+          {state.gameOver && (
+            <h2 style={{ textAlign: 'center' }}>
+              {playerScore > 21 ? 'Bust! You lose!' :
+               dealerScore > 21 ? 'Dealer busts! You win!' :
+               playerScore > dealerScore ? 'You win!' :
+               playerScore < dealerScore ? 'You lose!' :
+               'It\'s a tie!'}
+            </h2>
+          )}
         </div>
-        {state.gameOver && (
-          <h2 style={{ textAlign: 'center' }}>
-            {playerScore > 21 ? 'Bust! You lose!' :
-             dealerScore > 21 ? 'Dealer busts! You win!' :
-             playerScore > dealerScore ? 'You win!' :
-             playerScore < dealerScore ? 'You lose!' :
-             'It\'s a tie!'}
-          </h2>
-        )}
       </div>
     ),
     intents: [
