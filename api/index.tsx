@@ -133,8 +133,19 @@ app.frame('/', (c) => {
 
   return c.res({
     image: (
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', backgroundColor: '#2c3e50', color: 'white', padding: '20px', width: '100%', height: '100%' }}>
-        <h1 style={{ marginBottom: '20px' }}>WavyJack</h1> // Change the title here
+      <div style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        backgroundImage: 'ipfs://Qmf7UyLDQMEpsRzxsZppePXTV3yRD6z17gBScKvSCVcqys', // Set the background image here
+        backgroundSize: 'cover', // Cover the entire area
+        backgroundPosition: 'center', // Center the image
+        color: 'white',
+        padding: '20px',
+        width: '100%',
+        height: '100%'
+      }}>
+        <h1 style={{ marginBottom: '20px' }}>WavyJack</h1>
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
           <h2>Your Hand: {playerScore}</h2>
           <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '20px' }}>
