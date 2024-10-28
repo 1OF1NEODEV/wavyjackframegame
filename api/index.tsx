@@ -197,7 +197,7 @@ app.frame('/', (c) => {
       </div>
     ),
     intents: [
-      <Button value="start">New Game</Button>,
+      <Button value="start">Play New Game</Button>,
       ...(!state.gameOver ? [
         <Button value="hit">Hit</Button>,
         <Button value="stand">Stand</Button>
