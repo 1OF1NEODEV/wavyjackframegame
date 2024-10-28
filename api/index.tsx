@@ -74,6 +74,7 @@ export const app = new Frog({
   assetsPath: '/assets',
   basePath: '/api',
   title: 'WavyJack',
+  imageOptions: { width: 1980, height: 1048 }
 })
 
 app.use('/assets/*', serveStatic({ root: './assets' }))
