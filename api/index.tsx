@@ -124,16 +124,14 @@ app.frame('/', (c) => {
         gameOver: true
       }
     }
-  })
+  });
 
-  const playerScore = calculateHandValue(state.playerHand)
-  const dealerScore = calculateHandValue(state.dealerHand)
+  const playerScore = calculateHandValue(state.playerHand);
+  const dealerScore = calculateHandValue(state.dealerHand);
 
   // Use the environment variable for the base URL
   const baseUrl = process.env.BASE_URL || 'http://localhost:5173'; // Fallback for local development
-  const backgroundImageUrl = `${baseUrl}/assets/background.png`;
-
-  console.log('BASE_URL:', process.env.BASE_URL);
+  const backgroundImageUrl = `${baseUrl}/assets/background.png`; // Ensure this is the same image
 
   return c.res({
     image: (
@@ -143,17 +141,24 @@ app.frame('/', (c) => {
         alignItems: 'center',
         justifyContent: 'center',
         backgroundImage: `url(${backgroundImageUrl})`, // Use absolute URL here
-        backgroundSize: 'contain', // Change to contain to show the entire image
+        backgroundSize: 'cover', // Use cover to fill the container
         backgroundPosition: 'center', // Center the image
         backgroundRepeat: 'no-repeat', // Prevent the image from repeating
         color: 'white',
         padding: '20px',
         width: '100%',
         height: '100vh', // Use viewport height for full screen
-        textAlign: 'center'
+        textAlign: 'center',
+        position: 'relative', // Ensure positioning context
       }}>
-        <h1 style={{ marginBottom: '20px' }}>WavyJack</h1>
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
+        <div style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 1, // Ensure content is above the background
+        }}>
+          <h1 style={{ marginBottom: '20px' }}>WavyJack</h1>
           <h2>Your Hand: {playerScore}</h2>
           <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '20px' }}>
             {state.playerHand.map((card: Card, index: number) => (
@@ -167,8 +172,6 @@ app.frame('/', (c) => {
               />
             ))}
           </div>
-        </div>
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
           <h2>Dealer's Hand: {state.gameOver ? dealerScore : '?'}</h2>
           <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '20px' }}>
             {state.dealerHand.map((card: Card, index: number) => (
@@ -185,16 +188,16 @@ app.frame('/', (c) => {
               />
             ))}
           </div>
+          {state.gameOver && (
+            <h2 style={{ textAlign: 'center' }}>
+              {playerScore > 21 ? 'Bust! You lose!' :
+               dealerScore > 21 ? 'Dealer busts! You win!' :
+               playerScore > dealerScore ? 'You win!' :
+               playerScore < dealerScore ? 'You lose!' :
+               'It\'s a tie!'}
+            </h2>
+          )}
         </div>
-        {state.gameOver && (
-          <h2 style={{ textAlign: 'center' }}>
-            {playerScore > 21 ? 'Bust! You lose!' :
-             dealerScore > 21 ? 'Dealer busts! You win!' :
-             playerScore > dealerScore ? 'You win!' :
-             playerScore < dealerScore ? 'You lose!' :
-             'It\'s a tie!'}
-          </h2>
-        )}
       </div>
     ),
     intents: [
@@ -204,7 +207,7 @@ app.frame('/', (c) => {
         <Button value="stand">Stand</Button>
       ] : [])
     ]
-  })
+  });
 });
 
 // @ts-ignore
