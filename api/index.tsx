@@ -142,7 +142,7 @@ app.frame('/', (c) => {
         alignItems: 'center',
         justifyContent: 'center',
         backgroundImage: `url(${backgroundImageUrl})`, // Use absolute URL here
-        backgroundSize: 'cover', // Cover the entire area
+        backgroundSize: 'contain', // Change to contain to show the entire image
         backgroundPosition: 'center', // Center the image
         backgroundRepeat: 'no-repeat', // Prevent the image from repeating
         color: 'white',
