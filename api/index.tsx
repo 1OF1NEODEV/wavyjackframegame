@@ -129,7 +129,10 @@ app.frame('/', (c) => {
   const dealerScore = calculateHandValue(state.dealerHand)
 
   // Use the environment variable for the base URL
-  const backgroundImageUrl = `${process.env.BASE_URL}/assets/background.png`;
+  const baseUrl = process.env.BASE_URL || 'http://localhost:5173'; // Fallback for local development
+  const backgroundImageUrl = `${baseUrl}/assets/background.png`;
+
+  console.log('BASE_URL:', process.env.BASE_URL);
 
   return c.res({
     image: (
@@ -154,7 +157,7 @@ app.frame('/', (c) => {
             {state.playerHand.map((card: Card, index: number) => (
               <img 
                 key={index} 
-                src={`${process.env.BASE_URL}/assets/${card.value.toLowerCase()}_of_${card.suit.toLowerCase()}.png`} 
+                src={`${baseUrl}/assets/${card.value.toLowerCase()}_of_${card.suit.toLowerCase()}.png`} 
                 alt={`${card.value} of ${card.suit}`} 
                 style={{ width: '80px', height: '120px', marginRight: '5px' }} 
                 width={80}
@@ -170,8 +173,8 @@ app.frame('/', (c) => {
               <img 
                 key={index} 
                 src={index === 0 || state.gameOver 
-                  ? `${process.env.BASE_URL}/assets/${card.value.toLowerCase()}_of_${card.suit.toLowerCase()}.png`
-                  : `${process.env.BASE_URL}/assets/card_back.png`
+                  ? `${baseUrl}/assets/${card.value.toLowerCase()}_of_${card.suit.toLowerCase()}.png`
+                  : `${baseUrl}/assets/card_back.png`
                 } 
                 alt="Card" 
                 style={{ width: '80px', height: '120px', marginRight: '5px' }} 
