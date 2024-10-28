@@ -128,8 +128,8 @@ app.frame('/', (c) => {
   const playerScore = calculateHandValue(state.playerHand)
   const dealerScore = calculateHandValue(state.dealerHand)
 
-  // Construct the absolute URL for the background image
-  const backgroundImageUrl = `${window.location.origin}/assets/background.png`;
+  // Use the environment variable for the base URL
+  const backgroundImageUrl = `${process.env.BASE_URL}/assets/background.png`;
 
   return c.res({
     image: (
@@ -154,7 +154,7 @@ app.frame('/', (c) => {
             {state.playerHand.map((card: Card, index: number) => (
               <img 
                 key={index} 
-                src={`${window.location.origin}/assets/${card.value.toLowerCase()}_of_${card.suit.toLowerCase()}.png`} 
+                src={`${process.env.BASE_URL}/assets/${card.value.toLowerCase()}_of_${card.suit.toLowerCase()}.png`} 
                 alt={`${card.value} of ${card.suit}`} 
                 style={{ width: '80px', height: '120px', marginRight: '5px' }} 
                 width={80}
@@ -170,8 +170,8 @@ app.frame('/', (c) => {
               <img 
                 key={index} 
                 src={index === 0 || state.gameOver 
-                  ? `${window.location.origin}/assets/${card.value.toLowerCase()}_of_${card.suit.toLowerCase()}.png`
-                  : `${window.location.origin}/assets/card_back.png`
+                  ? `${process.env.BASE_URL}/assets/${card.value.toLowerCase()}_of_${card.suit.toLowerCase()}.png`
+                  : `${process.env.BASE_URL}/assets/card_back.png`
                 } 
                 alt="Card" 
                 style={{ width: '80px', height: '120px', marginRight: '5px' }} 
