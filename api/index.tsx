@@ -134,11 +134,15 @@ app.frame('/', (c) => {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        backgroundColor: '#000000', // Background color change
+        justifyContent: 'center',
+        backgroundImage: 'url(/assets/background.png)', // Set your background image here
+        backgroundSize: 'cover', // Cover the entire area
+        backgroundPosition: 'center', // Center the image
         color: 'white',
         padding: '20px',
         width: '100%',
         height: '100%',
+        textAlign: 'center'
       }}>
         <h1 style={{ marginBottom: '20px' }}>WavyJack</h1>
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
