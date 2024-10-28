@@ -131,7 +131,9 @@ app.frame('/', (c) => {
 
   // Use the environment variable for the base URL
   const baseUrl = process.env.BASE_URL || 'http://localhost:5173'; // Fallback for local development
-  const backgroundImageUrl = `${baseUrl}/assets/background.png`; // Ensure this is the same image
+  const backgroundImageUrl = `${baseUrl}/assets/background.png`;
+
+  console.log('BASE_URL:', process.env.BASE_URL);
 
   return c.res({
     image: (
@@ -141,67 +143,58 @@ app.frame('/', (c) => {
         alignItems: 'center',
         justifyContent: 'center',
         backgroundImage: `url(${backgroundImageUrl})`, // Use absolute URL here
-        backgroundSize: 'cover', // Use cover to fill the container
+        backgroundSize: 'contain', // Change to contain to show the entire image
         backgroundPosition: 'center', // Center the image
         backgroundRepeat: 'no-repeat', // Prevent the image from repeating
         color: 'white',
         padding: '20px',
         width: '100%',
         height: '100vh', // Use viewport height for full screen
-        textAlign: 'center',
-        position: 'relative', // Ensure positioning context
+        textAlign: 'center'
       }}>
-        <div style={{
-          position: 'absolute', // Positioning for content
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)', // Center content
-          zIndex: 1, // Ensure content is above the background
-        }}>
-          <h1 style={{ marginBottom: '20px' }}>WavyJack</h1>
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
-            <h2>Your Hand: {playerScore}</h2>
-            <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '20px' }}>
-              {state.playerHand.map((card: Card, index: number) => (
-                <img 
-                  key={index} 
-                  src={`${baseUrl}/assets/${card.value.toLowerCase()}_of_${card.suit.toLowerCase()}.png`} 
-                  alt={`${card.value} of ${card.suit}`} 
-                  style={{ width: '80px', height: '120px', marginRight: '5px' }} 
-                  width={80}
-                  height={120}
-                />
-              ))}
-            </div>
+        <h1 style={{ marginBottom: '20px' }}>WavyJack</h1>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
+          <h2>Your Hand: {playerScore}</h2>
+          <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '20px' }}>
+            {state.playerHand.map((card: Card, index: number) => (
+              <img 
+                key={index} 
+                src={`${baseUrl}/assets/${card.value.toLowerCase()}_of_${card.suit.toLowerCase()}.png`} 
+                alt={`${card.value} of ${card.suit}`} 
+                style={{ width: '80px', height: '120px', marginRight: '5px' }} 
+                width={80}
+                height={120}
+              />
+            ))}
           </div>
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
-            <h2>Dealer's Hand: {state.gameOver ? dealerScore : '?'}</h2>
-            <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '20px' }}>
-              {state.dealerHand.map((card: Card, index: number) => (
-                <img 
-                  key={index} 
-                  src={index === 0 || state.gameOver 
-                    ? `${baseUrl}/assets/${card.value.toLowerCase()}_of_${card.suit.toLowerCase()}.png`
-                    : `${baseUrl}/assets/card_back.png`
-                  } 
-                  alt="Card" 
-                  style={{ width: '80px', height: '120px', marginRight: '5px' }} 
-                  width={80}
-                  height={120}
-                />
-              ))}
-            </div>
-          </div>
-          {state.gameOver && (
-            <h2 style={{ textAlign: 'center' }}>
-              {playerScore > 21 ? 'Bust! You lose!' :
-               dealerScore > 21 ? 'Dealer busts! You win!' :
-               playerScore > dealerScore ? 'You win!' :
-               playerScore < dealerScore ? 'You lose!' :
-               'It\'s a tie!'}
-            </h2>
-          )}
         </div>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
+          <h2>Dealer's Hand: {state.gameOver ? dealerScore : '?'}</h2>
+          <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '20px' }}>
+            {state.dealerHand.map((card: Card, index: number) => (
+              <img 
+                key={index} 
+                src={index === 0 || state.gameOver 
+                  ? `${baseUrl}/assets/${card.value.toLowerCase()}_of_${card.suit.toLowerCase()}.png`
+                  : `${baseUrl}/assets/card_back.png`
+                } 
+                alt="Card" 
+                style={{ width: '80px', height: '120px', marginRight: '5px' }} 
+                width={80}
+                height={120}
+              />
+            ))}
+          </div>
+        </div>
+        {state.gameOver && (
+          <h2 style={{ textAlign: 'center' }}>
+            {playerScore > 21 ? 'Bust! You lose!' :
+             dealerScore > 21 ? 'Dealer busts! You win!' :
+             playerScore > dealerScore ? 'You win!' :
+             playerScore < dealerScore ? 'You lose!' :
+             'It\'s a tie!'}
+          </h2>
+        )}
       </div>
     ),
     intents: [
