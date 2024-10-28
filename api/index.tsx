@@ -78,8 +78,6 @@ export const app = new Frog({
 
 app.use('/assets/*', serveStatic({ root: './assets' }))
 
-let showTitleScreen = true; // State to manage title screen visibility
-
 app.frame('/', (c) => {
   const { buttonValue, deriveState } = c
   
@@ -90,81 +88,45 @@ app.frame('/', (c) => {
       state = previousState as GameState;
     }
 
-    if (showTitleScreen) {
-      if (buttonValue === 'start') {
-        showTitleScreen = false; // Hide title screen and start the game
-        const newDeck = createDeck();
-        const [card1, deck1] = drawCard(newDeck);
-        const [card2, deck2] = drawCard(deck1);
-        const [dealerCard, finalDeck] = drawCard(deck2);
-        state = {
-          playerHand: [card1, card2],
-          dealerHand: [dealerCard],
-          deck: finalDeck,
-          gameOver: false
-        };
-      } else if (buttonValue === 'settings') {
-        // Handle settings button functionality
-        console.log("Settings button clicked");
-      } else if (buttonValue === 'exit') {
-        // Handle exit button functionality
-        console.log("Exit button clicked");
+    if (buttonValue === 'start') {
+      const newDeck = createDeck()
+      const [card1, deck1] = drawCard(newDeck)
+      const [card2, deck2] = drawCard(deck1)
+      const [dealerCard, finalDeck] = drawCard(deck2)
+      state = {
+        playerHand: [card1, card2],
+        dealerHand: [dealerCard],
+        deck: finalDeck,
+        gameOver: false
       }
-    } else {
-      if (buttonValue === 'hit') {
-        const [newCard, newDeck] = drawCard(state.deck);
-        const newPlayerHand = [...state.playerHand, newCard];
-        state = {
-          ...state,
-          playerHand: newPlayerHand,
-          deck: newDeck,
-          gameOver: calculateHandValue(newPlayerHand) > 21
-        };
-      } else if (buttonValue === 'stand') {
-        let dealerHand = [...state.dealerHand];
-        let deck = [...state.deck];
-        while (calculateHandValue(dealerHand) < 17) {
-          const [newCard, newDeck] = drawCard(deck);
-          dealerHand.push(newCard);
-          deck = newDeck;
-        }
-        state = {
-          ...state,
-          dealerHand,
-          deck,
-          gameOver: true
-        };
+    } else if (buttonValue === 'hit') {
+      const [newCard, newDeck] = drawCard(state.deck)
+      const newPlayerHand = [...state.playerHand, newCard]
+      state = {
+        ...state,
+        playerHand: newPlayerHand,
+        deck: newDeck,
+        gameOver: calculateHandValue(newPlayerHand) > 21
+      }
+    } else if (buttonValue === 'stand') {
+      let dealerHand = [...state.dealerHand]
+      let deck = [...state.deck]
+      while (calculateHandValue(dealerHand) < 17) {
+        const [newCard, newDeck] = drawCard(deck)
+        dealerHand.push(newCard)
+        deck = newDeck
+      }
+      state = {
+        ...state,
+        dealerHand,
+        deck,
+        gameOver: true
       }
     }
-  });
+  })
 
-  if (showTitleScreen) {
-    return c.res({
-      image: (
-        <div style={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center', // Center vertically
-          backgroundColor: '#000000',
-          color: 'white',
-          padding: '20px',
-          width: '100%',
-          height: '100%',
-          textAlign: 'center' // Center text horizontally
-        }}>
-          <h1 style={{ marginBottom: '20px' }}>WavyJack</h1>
-          <Button value="start">Start Game</Button>
-          <Button value="settings">Settings</Button>
-          <Button value="exit">Exit</Button>
-        </div>
-      ),
-      intents: []
-    });
-  }
-
-  const playerScore = calculateHandValue(state.playerHand);
-  const dealerScore = calculateHandValue(state.dealerHand);
+  const playerScore = calculateHandValue(state.playerHand)
+  const dealerScore = calculateHandValue(state.dealerHand)
 
   return c.res({
     image: (
@@ -172,13 +134,11 @@ app.frame('/', (c) => {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: '#000000',
+        backgroundColor: '#000000', // Background color change
         color: 'white',
         padding: '20px',
         width: '100%',
         height: '100%',
-        textAlign: 'center'
       }}>
         <h1 style={{ marginBottom: '20px' }}>WavyJack</h1>
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
@@ -232,7 +192,7 @@ app.frame('/', (c) => {
         <Button value="stand">Stand</Button>
       ] : [])
     ]
-  });
+  })
 });
 
 // @ts-ignore
