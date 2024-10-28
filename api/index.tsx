@@ -142,12 +142,13 @@ app.frame('/', (c) => {
         alignItems: 'center',
         justifyContent: 'center',
         backgroundImage: `url(${backgroundImageUrl})`, // Use absolute URL here
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
+        backgroundSize: 'cover', // Cover the entire area
+        backgroundPosition: 'center', // Center the image
+        backgroundRepeat: 'no-repeat', // Prevent the image from repeating
         color: 'white',
         padding: '20px',
         width: '100%',
-        height: '100%',
+        height: '100vh', // Use viewport height for full screen
         textAlign: 'center'
       }}>
         <h1 style={{ marginBottom: '20px' }}>WavyJack</h1>
