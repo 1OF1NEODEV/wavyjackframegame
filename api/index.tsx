@@ -128,6 +128,9 @@ app.frame('/', (c) => {
   const playerScore = calculateHandValue(state.playerHand)
   const dealerScore = calculateHandValue(state.dealerHand)
 
+  // Construct the absolute URL for the background image
+  const backgroundImageUrl = `${window.location.origin}/assets/background.png`;
+
   return c.res({
     image: (
       <div style={{
@@ -135,9 +138,9 @@ app.frame('/', (c) => {
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundImage: 'url(/assets/background.png)', // Set your background image here
-        backgroundSize: 'cover', // Cover the entire area
-        backgroundPosition: 'center', // Center the image
+        backgroundImage: `url(${backgroundImageUrl})`, // Use absolute URL here
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
         color: 'white',
         padding: '20px',
         width: '100%',
@@ -151,7 +154,7 @@ app.frame('/', (c) => {
             {state.playerHand.map((card: Card, index: number) => (
               <img 
                 key={index} 
-                src={`/assets/${card.value.toLowerCase()}_of_${card.suit.toLowerCase()}.png`} 
+                src={`${window.location.origin}/assets/${card.value.toLowerCase()}_of_${card.suit.toLowerCase()}.png`} 
                 alt={`${card.value} of ${card.suit}`} 
                 style={{ width: '80px', height: '120px', marginRight: '5px' }} 
                 width={80}
@@ -167,8 +170,8 @@ app.frame('/', (c) => {
               <img 
                 key={index} 
                 src={index === 0 || state.gameOver 
-                  ? `/assets/${card.value.toLowerCase()}_of_${card.suit.toLowerCase()}.png`
-                  : '/assets/card_back.png'
+                  ? `${window.location.origin}/assets/${card.value.toLowerCase()}_of_${card.suit.toLowerCase()}.png`
+                  : `${window.location.origin}/assets/card_back.png`
                 } 
                 alt="Card" 
                 style={{ width: '80px', height: '120px', marginRight: '5px' }} 
